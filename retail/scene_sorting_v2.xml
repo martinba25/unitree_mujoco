@@ -1,0 +1,60 @@
+<mujoco model="scene_sorting_v2">
+    <option integrator="implicitfast" timestep="0.01" />
+    <include file="../unitree_robots/g1/g1_29dof.xml"/>
+    <visual>
+        <headlight ambient="0.4 0.4 0.4" diffuse="0.8 0.8 0.8" specular="0.1 0.1 0.1"/>
+        <rgba haze="0.15 0.25 0.35 1"/>
+        <global azimuth="150" elevation="-20" offwidth="1920" offheight="1080"/>
+    </visual>
+    <worldbody>
+        <light name="top_light" pos="0 0 4" dir="0 0 -1" directional="true" diffuse="0.9 0.9 0.9" specular="0.3 0.3 0.3"/>
+        <light name="fill_light" pos="2 -2 3" dir="-1 1 -1" directional="true" diffuse="0.4 0.4 0.5" specular="0.0 0.0 0.0"/>
+        <geom name="floor_retail" size="3 3 .05" type="plane" rgba=".18 .18 .18 1" friction="0.4 0.005 0.0001"/>
+
+        <!-- ── Sorting Bins ── -->
+        <body name="glass_bin" pos="0.4 -0.3 0">
+            <geom name="glass_bin_base" type="box" size=".1 .1 .01" rgba=".2 .5 .2 .8"/>
+            <geom name="glass_bin_wall_f" type="box" size=".1 .01 .06" pos="0 .1 .06" rgba=".2 .5 .2 .4"/>
+            <geom name="glass_bin_wall_b" type="box" size=".1 .01 .06" pos="0 -.1 .06" rgba=".2 .5 .2 .4"/>
+            <geom name="glass_bin_wall_l" type="box" size=".01 .1 .06" pos="-.1 0 .06" rgba=".2 .5 .2 .4"/>
+            <geom name="glass_bin_wall_r" type="box" size=".01 .1 .06" pos=".1 0 .06" rgba=".2 .5 .2 .4"/>
+            <site name="glass_goal" pos="0 0 0.05" size="0.05" rgba="0 1 0 0"/>
+        </body>
+        <body name="pet_bin" pos="0.4 0 0">
+            <geom name="pet_bin_base" type="box" size=".1 .1 .01" rgba=".2 .2 .5 .8"/>
+            <geom name="pet_bin_wall_f" type="box" size=".1 .01 .06" pos="0 .1 .06" rgba=".2 .2 .5 .4"/>
+            <geom name="pet_bin_wall_b" type="box" size=".1 .01 .06" pos="0 -.1 .06" rgba=".2 .2 .5 .4"/>
+            <geom name="pet_bin_wall_l" type="box" size=".01 .1 .06" pos="-.1 0 .06" rgba=".2 .2 .5 .4"/>
+            <geom name="pet_bin_wall_r" type="box" size=".01 .1 .06" pos=".1 0 .06" rgba=".2 .2 .5 .4"/>
+            <site name="pet_goal" pos="0 0 0.05" size="0.05" rgba="0 0 1 0"/>
+        </body>
+        <body name="can_bin" pos="0.4 0.3 0">
+            <geom name="can_bin_base" type="box" size=".1 .1 .01" rgba=".5 .2 .2 .8"/>
+            <geom name="can_bin_wall_f" type="box" size=".1 .01 .06" pos="0 .1 .06" rgba=".5 .2 .2 .4"/>
+            <geom name="can_bin_wall_b" type="box" size=".1 .01 .06" pos="0 -.1 .06" rgba=".5 .2 .2 .4"/>
+            <geom name="can_bin_wall_l" type="box" size=".01 .1 .06" pos="-.1 0 .06" rgba=".5 .2 .2 .4"/>
+            <geom name="can_bin_wall_r" type="box" size=".01 .1 .06" pos=".1 0 .06" rgba=".5 .2 .2 .4"/>
+            <site name="can_goal" pos="0 0 0.05" size="0.05" rgba="1 0 0 0"/>
+        </body>
+
+        <!-- ── Objects to sort ── -->
+        <body name="bottle_glass" pos="0.2 -0.2 0.12">
+            <freejoint/>
+            <geom name="glass_geom" type="cylinder" size=".03 .1" mass="0.5" rgba="0.2 0.9 0.3 1" friction="0.4"/>
+        </body>
+        <body name="bottle_pet" pos="0.2 0 0.12">
+            <freejoint/>
+            <geom name="pet_geom" type="cylinder" size=".03 .1" mass="0.05" rgba="0.2 0.3 0.9 1" friction="0.6"/>
+        </body>
+        <body name="can_aluminium" pos="0.2 0.2 0.1">
+            <freejoint/>
+            <geom name="can_geom" type="cylinder" size=".025 .08" mass="0.02" rgba="0.9 0.2 0.2 1" friction="0.5"/>
+        </body>
+
+        <!-- ── pitch_cam: pitched top-down view, G1 robot in frame ── -->
+        <camera name="pitch_cam"
+                pos="0.8 -1.4 1.6"
+                euler="55 0 15"
+                fovy="55"/>
+    </worldbody>
+</mujoco>

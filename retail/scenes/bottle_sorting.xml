@@ -1,0 +1,33 @@
+<mujoco model="bottle_sorting">
+    <compiler angle="degree" meshdir="../../unitree_robots/g1/meshes/" />
+    <option integrator="implicitfast" timestep="0.01" />
+    <include file="../../unitree_robots/g1/g1_29dof.xml"/>
+    <worldbody>
+        <light pos="0 0 3" dir="0 0 -1" directional="true"/>
+        <geom name="floor_retail" size="2 2 .05" type="plane" rgba=".2 .2 .2 1" friction="0.4 0.005 0.0001"/>
+        <body name="glass_bin" pos="0.4 -0.3 0">
+            <geom name="glass_bin_base" type="box" size=".1 .1 .01" rgba=".2 .5 .2 .3"/>
+            <site name="glass_goal" pos="0 0 0.05" size="0.05" rgba="0 1 0 0"/>
+        </body>
+        <body name="pet_bin" pos="0.4 0 0">
+            <geom name="pet_bin_base" type="box" size=".1 .1 .01" rgba=".2 .2 .5 .3"/>
+            <site name="pet_goal" pos="0 0 0.05" size="0.05" rgba="0 0 1 0"/>
+        </body>
+        <body name="can_bin" pos="0.4 0.3 0">
+            <geom name="can_bin_base" type="box" size=".1 .1 .01" rgba=".5 .2 .2 .3"/>
+            <site name="can_goal" pos="0 0 0.05" size="0.05" rgba="1 0 0 0"/>
+        </body>
+        <body name="bottle_glass" pos="0.2 -0.2 0.1">
+            <freejoint/>
+            <geom name="glass_geom" type="cylinder" size=".03 .1" mass="0.5" rgba="0 1 0 1" friction="0.4"/>
+        </body>
+        <body name="bottle_pet" pos="0.2 0 0.1">
+            <freejoint/>
+            <geom name="pet_geom" type="cylinder" size=".03 .1" mass="0.05" rgba="0 0 1 1" friction="0.6"/>
+        </body>
+        <body name="can_aluminium" pos="0.2 0.2 0.1">
+            <freejoint/>
+            <geom name="can_geom" type="cylinder" size=".025 .08" mass="0.02" rgba="1 0 0 1" friction="0.5"/>
+        </body>
+    </worldbody>
+</mujoco>
