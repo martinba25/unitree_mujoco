@@ -20,13 +20,12 @@ echo "════════════════════════�
 echo ""
 echo "▶ [1/4] rsync XML + Python → ${REMOTE}:${REMOTE_DIR}/"
 rsync -avz --checksum \
-    --include="*/" \
-    --include="*.xml" \
-    --include="*.py" \
-    --include="*.stl" \
-    --include="*.STL" \
-    --include="*.obj" \
-    --include="*.mtl" \
+    --exclude=".git/" \
+    --exclude=".claude/" \
+    --exclude="*.pyc" \
+    --exclude="__pycache__/" \
+    --exclude="*.egg-info/" \
+    --exclude=".env" \
     --exclude="*.png" \
     --exclude="*.jpg" \
     --exclude="*.jpeg" \
@@ -34,11 +33,13 @@ rsync -avz --checksum \
     --exclude="*.bmp" \
     --exclude="*.tiff" \
     --exclude="*.svg" \
-    --exclude=".git/" \
-    --exclude="*.pyc" \
-    --exclude="__pycache__/" \
-    --exclude="*.egg-info/" \
-    --exclude=".env" \
+    --include="*/" \
+    --include="*.xml" \
+    --include="*.py" \
+    --include="*.stl" \
+    --include="*.STL" \
+    --include="*.obj" \
+    --include="*.mtl" \
     --exclude="*" \
     "${LOCAL_DIR}/" \
     "${REMOTE}:${REMOTE_DIR}/"
@@ -84,10 +85,12 @@ mujoco.mj_forward(model, data)
 renderer = mujoco.Renderer(model, height=1080, width=1920)
 renderer.update_scene(data, camera='pitch_cam')
 pixels = renderer.render()
+renderer.close()  # Explizit schließen → verhindert EGL-Destruktor-Warnings
 
 os.makedirs(os.path.dirname(output_path), exist_ok=True)
 imageio.imwrite(output_path, pixels)
 print(f'  Bild gespeichert: {output_path}')
+print(f'  Pixel mean={pixels.mean():.1f}  max={pixels.max()}')
 print(f'  Auflösung: {pixels.shape[1]}x{pixels.shape[0]}')
 PYEOF"
 
