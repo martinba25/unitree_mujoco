@@ -78,6 +78,32 @@ if cam_id < 0:
     raise RuntimeError('Kamera pitch_cam nicht gefunden!')
 print(f'  Kamera pitch_cam ID: {cam_id}')
 
+# ── G1 Stehpose ────────────────────────────────────────────────────────
+# floating_base_joint: qpos[0..6] = x,y,z, qw,qx,qy,qz
+data.qpos[0] = 0.0    # x
+data.qpos[1] = 0.0    # y
+data.qpos[2] = 0.78   # z: Beckenhöhe stehend
+data.qpos[3] = 1.0    # quaternion w (aufrecht, keine Rotation)
+data.qpos[4] = 0.0
+data.qpos[5] = 0.0
+data.qpos[6] = 0.0
+
+# Beingelenke: leicht gebeugt für natürliche Stehpose
+data.qpos[7]  = -0.15  # left_hip_pitch
+data.qpos[10] =  0.30  # left_knee
+data.qpos[11] = -0.15  # left_ankle_pitch
+data.qpos[13] = -0.15  # right_hip_pitch
+data.qpos[16] =  0.30  # right_knee
+data.qpos[17] = -0.15  # right_ankle_pitch
+
+# Arme: entspannt seitlich hängend
+data.qpos[22] =  0.30  # left_shoulder_pitch  (leicht nach vorne)
+data.qpos[23] =  0.20  # left_shoulder_roll   (leicht weg vom Körper)
+data.qpos[25] =  0.50  # left_elbow           (angewinkelt)
+data.qpos[29] =  0.30  # right_shoulder_pitch
+data.qpos[30] = -0.20  # right_shoulder_roll
+data.qpos[32] =  0.50  # right_elbow
+
 # Physik kurz einlaufen lassen damit Objekte liegen
 mujoco.mj_forward(model, data)
 

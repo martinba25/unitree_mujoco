@@ -1,12 +1,12 @@
 <mujoco model="scene_sorting_v2">
-    <!-- angle="degree" muss in der Top-Level-Datei stehen, damit euler-Werte
-         der Kamera als Grad interpretiert werden (g1_29dof.xml nutzt radian). -->
-    <compiler angle="degree"/>
+    <!-- angle="radian": kompatibel mit g1_29dof.xml (Gelenke in Radians).
+         Kamera nutzt xyaxes (einheitenunabhängig) und fovy (immer Grad). -->
+    <compiler angle="radian"/>
     <option integrator="implicitfast" timestep="0.01" />
     <include file="../unitree_robots/g1/g1_29dof.xml"/>
     <visual>
         <headlight ambient="0.6 0.6 0.6" diffuse="1.0 1.0 1.0" specular="0.2 0.2 0.2"/>
-        <rgba haze="0.6 0.65 0.7 1"/>
+        <rgba haze="0.2 0.25 0.35 1"/>
         <global azimuth="150" elevation="-20" offwidth="1920" offheight="1080"/>
     </visual>
     <worldbody>
@@ -23,7 +23,7 @@
                directional="true"
                ambient="0.15 0.15 0.2" diffuse="0.6 0.6 0.7" specular="0.0 0.0 0.0"
                castshadow="false"/>
-        <geom name="floor_retail" size="4 4 .05" type="plane" rgba=".35 .35 .35 1" friction="0.4 0.005 0.0001"/>
+        <geom name="floor_retail" size="4 4 .05" type="plane" rgba=".15 .15 .18 1" friction="0.4 0.005 0.0001"/>
 
         <!-- ── Sorting Bins ── -->
         <body name="glass_bin" pos="0.4 -0.3 0">
@@ -69,11 +69,16 @@
              pos: 1.5m seitlich, 2m vor der Szene, 1.8m Höhe
              xyaxes: X-Achse der Kamera = rechts in der Welt,
                      Y-Achse (up) = schräg nach oben-hinten (Pitch ~50°) -->
-        <!-- pitch_cam: Nahaufnahme der Sortierstation von schräg oben
-             Fokus auf Bins + Flaschen, Boden gut sichtbar, kein Himmel -->
+        <!-- pitch_cam: G1 stehend links, Sortierstation rechts im Bild
+             Kamera schaut von vorne-schräg auf die gesamte Szene -->
+        <!-- pitch_cam: G1 vollständig (Kopf-Fuß) + Sortierstation im Bild -->
+        <!-- pitch_cam: G1 vollständig (Kopf-Fuß) + Sortierstation im Bild -->
+        <!-- pitch_cam: G1 vollständig + Sortierstation, kein Himmels-Streifen -->
+        <!-- pitch_cam: G1 vollständig + Sortierstation, kein Himmel -->
+        <!-- pitch_cam: rechnerisch verifiziert - G1 Kopf (31°) + Füße (8°) < fovy/2 (32.5°) -->
         <camera name="pitch_cam"
-                pos="0.3 -0.9 1.1"
-                xyaxes="1 0 0  0 0.766 0.643"
+                pos="0.2 -3.0 1.5"
+                xyaxes="1 0 0  0 0.574 0.819"
                 fovy="65"/>
     </worldbody>
 </mujoco>
