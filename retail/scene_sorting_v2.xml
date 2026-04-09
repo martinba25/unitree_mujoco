@@ -1,16 +1,16 @@
 <mujoco model="scene_sorting_v2">
-    <!-- angle="radian": kompatibel mit g1_29dof.xml (Gelenke in Radians).
-         Kamera nutzt xyaxes (einheitenunabhängig) und fovy (immer Grad). -->
+    <!-- G1-D Wheeled Proxy: Beine durch Quader-Sockel ersetzt.
+         Kisten: Z=0 (Boden-Ebene).
+         Förderband: Z=0.8. -->
     <compiler angle="radian"/>
     <option integrator="implicitfast" timestep="0.01" />
-    <include file="../unitree_robots/g1/g1_29dof.xml"/>
+    <include file="../unitree_robots/g1/g1_d_wheeled_proxy.xml"/>
     <visual>
         <headlight ambient="0.6 0.6 0.6" diffuse="1.0 1.0 1.0" specular="0.2 0.2 0.2"/>
         <rgba haze="0.2 0.25 0.35 1"/>
         <global azimuth="150" elevation="-20" offwidth="1920" offheight="1080"/>
     </visual>
     <worldbody>
-        <!-- Lichter mit ambient-Anteil: ohne ambient bleibt das Bild dunkel -->
         <light name="top_light"   pos="0 0 5"   dir="0 0 -1"
                directional="true"
                ambient="0.4 0.4 0.4" diffuse="1.0 1.0 1.0" specular="0.3 0.3 0.3"
@@ -25,57 +25,66 @@
                castshadow="false"/>
         <geom name="floor_retail" size="4 4 .05" type="plane" rgba=".15 .15 .18 1" friction="0.4 0.005 0.0001"/>
 
-        <!-- ── Sorting Bins ── -->
+        <!-- ── Förderband (Z=0.8) ── -->
+        <body name="conveyor_belt" pos="0.0 0.8 0.8">
+            <!-- Tischplatte des Förderbands -->
+            <geom name="belt_surface" type="box" size="0.6 0.15 0.02"
+                  rgba="0.3 0.3 0.3 1"/>
+            <!-- Linkes Stützgestell -->
+            <geom name="belt_leg_l" type="box" size="0.03 0.03 0.4"
+                  pos="-0.5 0 -0.41" rgba="0.2 0.2 0.2 1"/>
+            <!-- Rechtes Stützgestell -->
+            <geom name="belt_leg_r" type="box" size="0.03 0.03 0.4"
+                  pos=" 0.5 0 -0.41" rgba="0.2 0.2 0.2 1"/>
+            <!-- Antriebsrolle vorne -->
+            <geom name="belt_roller_f" type="cylinder" size="0.04 0.15"
+                  pos="-0.56 0 0" quat="0.707107 0 0.707107 0" rgba="0.4 0.4 0.4 1"/>
+            <!-- Antriebsrolle hinten -->
+            <geom name="belt_roller_b" type="cylinder" size="0.04 0.15"
+                  pos=" 0.56 0 0" quat="0.707107 0 0.707107 0" rgba="0.4 0.4 0.4 1"/>
+        </body>
+
+        <!-- ── Sorting Bins (Z=0) ── -->
         <body name="glass_bin" pos="0.4 -0.3 0">
-            <geom name="glass_bin_base" type="box" size=".1 .1 .01" rgba=".2 .5 .2 .8"/>
-            <geom name="glass_bin_wall_f" type="box" size=".1 .01 .06" pos="0 .1 .06" rgba=".2 .5 .2 .4"/>
+            <geom name="glass_bin_base"   type="box" size=".1 .1 .01"               rgba=".2 .5 .2 .8"/>
+            <geom name="glass_bin_wall_f" type="box" size=".1 .01 .06" pos="0 .1 .06"  rgba=".2 .5 .2 .4"/>
             <geom name="glass_bin_wall_b" type="box" size=".1 .01 .06" pos="0 -.1 .06" rgba=".2 .5 .2 .4"/>
             <geom name="glass_bin_wall_l" type="box" size=".01 .1 .06" pos="-.1 0 .06" rgba=".2 .5 .2 .4"/>
-            <geom name="glass_bin_wall_r" type="box" size=".01 .1 .06" pos=".1 0 .06" rgba=".2 .5 .2 .4"/>
+            <geom name="glass_bin_wall_r" type="box" size=".01 .1 .06" pos=".1 0 .06"  rgba=".2 .5 .2 .4"/>
             <site name="glass_goal" pos="0 0 0.05" size="0.05" rgba="0 1 0 0"/>
         </body>
         <body name="pet_bin" pos="0.4 0 0">
-            <geom name="pet_bin_base" type="box" size=".1 .1 .01" rgba=".2 .2 .5 .8"/>
-            <geom name="pet_bin_wall_f" type="box" size=".1 .01 .06" pos="0 .1 .06" rgba=".2 .2 .5 .4"/>
+            <geom name="pet_bin_base"   type="box" size=".1 .1 .01"               rgba=".2 .2 .5 .8"/>
+            <geom name="pet_bin_wall_f" type="box" size=".1 .01 .06" pos="0 .1 .06"  rgba=".2 .2 .5 .4"/>
             <geom name="pet_bin_wall_b" type="box" size=".1 .01 .06" pos="0 -.1 .06" rgba=".2 .2 .5 .4"/>
             <geom name="pet_bin_wall_l" type="box" size=".01 .1 .06" pos="-.1 0 .06" rgba=".2 .2 .5 .4"/>
-            <geom name="pet_bin_wall_r" type="box" size=".01 .1 .06" pos=".1 0 .06" rgba=".2 .2 .5 .4"/>
+            <geom name="pet_bin_wall_r" type="box" size=".01 .1 .06" pos=".1 0 .06"  rgba=".2 .2 .5 .4"/>
             <site name="pet_goal" pos="0 0 0.05" size="0.05" rgba="0 0 1 0"/>
         </body>
         <body name="can_bin" pos="0.4 0.3 0">
-            <geom name="can_bin_base" type="box" size=".1 .1 .01" rgba=".5 .2 .2 .8"/>
-            <geom name="can_bin_wall_f" type="box" size=".1 .01 .06" pos="0 .1 .06" rgba=".5 .2 .2 .4"/>
+            <geom name="can_bin_base"   type="box" size=".1 .1 .01"               rgba=".5 .2 .2 .8"/>
+            <geom name="can_bin_wall_f" type="box" size=".1 .01 .06" pos="0 .1 .06"  rgba=".5 .2 .2 .4"/>
             <geom name="can_bin_wall_b" type="box" size=".1 .01 .06" pos="0 -.1 .06" rgba=".5 .2 .2 .4"/>
             <geom name="can_bin_wall_l" type="box" size=".01 .1 .06" pos="-.1 0 .06" rgba=".5 .2 .2 .4"/>
-            <geom name="can_bin_wall_r" type="box" size=".01 .1 .06" pos=".1 0 .06" rgba=".5 .2 .2 .4"/>
+            <geom name="can_bin_wall_r" type="box" size=".01 .1 .06" pos=".1 0 .06"  rgba=".5 .2 .2 .4"/>
             <site name="can_goal" pos="0 0 0.05" size="0.05" rgba="1 0 0 0"/>
         </body>
 
-        <!-- ── Objects to sort ── -->
-        <body name="bottle_glass" pos="0.2 -0.2 0.12">
+        <!-- ── Objects to sort (starten auf dem Förderband Z≈0.8) ── -->
+        <body name="bottle_glass" pos="0.0 0.8 0.84">
             <freejoint/>
             <geom name="glass_geom" type="cylinder" size=".03 .1" mass="0.5" rgba="0.2 0.9 0.3 1" friction="0.4"/>
         </body>
-        <body name="bottle_pet" pos="0.2 0 0.12">
+        <body name="bottle_pet" pos="-0.2 0.8 0.84">
             <freejoint/>
             <geom name="pet_geom" type="cylinder" size=".03 .1" mass="0.05" rgba="0.2 0.3 0.9 1" friction="0.6"/>
         </body>
-        <body name="can_aluminium" pos="0.2 0.2 0.1">
+        <body name="can_aluminium" pos="-0.4 0.8 0.84">
             <freejoint/>
             <geom name="can_geom" type="cylinder" size=".025 .08" mass="0.02" rgba="0.9 0.2 0.2 1" friction="0.5"/>
         </body>
 
-        <!-- ── pitch_cam: Draufsicht schräg von vorne-links, G1 im Bild ──
-             pos: 1.5m seitlich, 2m vor der Szene, 1.8m Höhe
-             xyaxes: X-Achse der Kamera = rechts in der Welt,
-                     Y-Achse (up) = schräg nach oben-hinten (Pitch ~50°) -->
-        <!-- pitch_cam: G1 stehend links, Sortierstation rechts im Bild
-             Kamera schaut von vorne-schräg auf die gesamte Szene -->
-        <!-- pitch_cam: G1 vollständig (Kopf-Fuß) + Sortierstation im Bild -->
-        <!-- pitch_cam: G1 vollständig (Kopf-Fuß) + Sortierstation im Bild -->
-        <!-- pitch_cam: G1 vollständig + Sortierstation, kein Himmels-Streifen -->
-        <!-- pitch_cam: G1 vollständig + Sortierstation, kein Himmel -->
-        <!-- pitch_cam: rechnerisch verifiziert - G1 Kopf (31°) + Füße (8°) < fovy/2 (32.5°) -->
+        <!-- pitch_cam: G1-D vollständig + Sortierstation im Bild -->
         <camera name="pitch_cam"
                 pos="0.2 -3.0 1.5"
                 xyaxes="1 0 0  0 0.574 0.819"
